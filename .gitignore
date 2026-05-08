@@ -1,0 +1,15 @@
+backend/.venv/
+backend/*.log
+__pycache__/
+*.pyc
+.pytest_cache/
+frontend/dist/
+frontend/node_modules/
+frontend/*.log
+*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+build/
+dist/
+release/
+*.spec
