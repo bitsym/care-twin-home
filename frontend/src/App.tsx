@@ -13,6 +13,7 @@ import { EventStream } from "./components/EventStream";
 import { FamilyAlertMockup } from "./components/FamilyAlertMockup";
 import { FloorPlan } from "./components/FloorPlan";
 import { RiskPanel } from "./components/RiskPanel";
+import { RiskResponseMatrix } from "./components/RiskResponseMatrix";
 import { ScenarioControls } from "./components/ScenarioControls";
 import { SimulationEntry } from "./components/SimulationEntry";
 import { SmartHomeActions } from "./components/SmartHomeActions";
@@ -196,10 +197,12 @@ function App() {
             面向独居与半失能老人的非侵入式 AI 居家安全监护演示：实时传感器、可解释风险评分、智能家居与家属联动。
           </p>
         </div>
-        <div className="connection-card" aria-live="polite">
-          <span>WebSocket</span>
-          <strong>{connectionLabel}</strong>
-        </div>
+        {activeView !== "entry" && (
+          <div className="connection-card" aria-live="polite">
+            <span>WebSocket</span>
+            <strong>{connectionLabel}</strong>
+          </div>
+        )}
       </header>
 
       {error && <div className="error-banner">{error}</div>}
@@ -227,37 +230,36 @@ function App() {
           onClick={() => setActiveView("data")}
           type="button"
         >
-          数据详情
+          数据分析
         </button>
       </nav>
 
-      <section className="demo-command-strip" aria-label="演示状态概览">
-        <div>
-          <span>当前场景</span>
-          <strong>{riskState.scenario}</strong>
-        </div>
-        <div>
-          <span>风险等级</span>
-          <strong>{riskState.level}</strong>
-        </div>
-        <div>
-          <span>最新位置</span>
-          <strong>{homeState.current_location ?? "未检测"}</strong>
-        </div>
-        <div>
-          <span>事件数量</span>
-          <strong>{events.length}</strong>
-        </div>
-      </section>
+      {activeView !== "entry" && (
+        <section className="demo-command-strip" aria-label="演示状态概览">
+          <div>
+            <span>当前场景</span>
+            <strong>{riskState.scenario}</strong>
+          </div>
+          <div>
+            <span>风险等级</span>
+            <strong>{riskState.level}</strong>
+          </div>
+          <div>
+            <span>最新位置</span>
+            <strong>{homeState.current_location ?? "未检测"}</strong>
+          </div>
+          <div>
+            <span>事件数量</span>
+            <strong>{events.length}</strong>
+          </div>
+        </section>
+      )}
 
       {activeView === "entry" ? (
         <SimulationEntry
-          config={digitalTwinConfig}
-          connectionLabel={connectionLabel}
           onOpenData={() => setActiveView("data")}
           onOpenLive={() => setActiveView("live")}
           onStartScenario={runScenario}
-          riskState={riskState}
           scenarios={scenarios}
         />
       ) : activeView === "live" ? (
@@ -272,20 +274,17 @@ function App() {
             <SmartHomeActions homeState={homeState} riskState={riskState} />
             <FamilyAlertMockup homeState={homeState} riskState={riskState} />
           </aside>
-          <div className="live-control-row">
-            <ScenarioControls
-              activeScenarioId={activeScenarioId}
-              isRunning={isRunning}
-              onReset={resetDemo}
-              onStart={runScenario}
-              scenarios={scenarios}
-            />
-            <StoryDwellPanel
-              events={events}
-              riskState={riskState}
-              scenarioId={activeScenarioId}
-            />
-          </div>
+        </div>
+      ) : (
+        <div className="data-demo-grid">
+          <RiskResponseMatrix riskState={riskState} />
+          <ScenarioControls
+            activeScenarioId={activeScenarioId}
+            isRunning={isRunning}
+            onReset={resetDemo}
+            onStart={runScenario}
+            scenarios={scenarios}
+          />
           <DigitalTwinControls
             config={digitalTwinConfig}
             onSelectAnomaly={setSelectedAnomaly}
@@ -293,9 +292,11 @@ function App() {
             runtime={digitalTwinRuntime}
             selectedAnomaly={selectedAnomaly}
           />
-        </div>
-      ) : (
-        <div className="data-demo-grid">
+          <StoryDwellPanel
+            events={events}
+            riskState={riskState}
+            scenarioId={activeScenarioId}
+          />
           <DemoTimeline
             events={events}
             riskState={riskState}

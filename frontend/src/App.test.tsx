@@ -138,7 +138,6 @@ test("renders the web simulation entry and opens the live demo surface", async (
   expect(screen.getByRole("button", { name: /启动主推场景/i })).toBeInTheDocument();
   expect(screen.getByRole("heading", { name: "选择一个仿真故事" })).toBeInTheDocument();
   expect(screen.getByRole("heading", { name: "网页端展示路径" })).toBeInTheDocument();
-  expect(screen.getByText("7 个故事")).toBeInTheDocument();
   expect(screen.getByRole("button", { name: /认知障碍门安全/i })).toBeInTheDocument();
   expect(screen.queryByRole("heading", { name: "AI 风险评估" })).not.toBeInTheDocument();
 
@@ -154,9 +153,9 @@ test("renders the web simulation entry and opens the live demo surface", async (
   expect(screen.getByRole("heading", { name: "AI 风险评估" })).toBeInTheDocument();
   expect(screen.getByRole("heading", { name: "智能联动" })).toBeInTheDocument();
   expect(screen.getByRole("heading", { name: "家属手机提醒" })).toBeInTheDocument();
-  expect(screen.getByRole("heading", { name: "全场景数字孪生" })).toBeInTheDocument();
-  expect(screen.getByRole("heading", { name: "当前故事驻留" })).toBeInTheDocument();
-  expect(screen.getByText("选择一个场景开始演示")).toBeInTheDocument();
+  expect(screen.queryByRole("heading", { name: "全场景数字孪生" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("heading", { name: "当前故事驻留" })).not.toBeInTheDocument();
+  expect(screen.queryByText("选择一个场景开始演示")).not.toBeInTheDocument();
   expect(screen.getByRole("heading", { name: "动态居家仿真" })).toBeInTheDocument();
   expect(screen.getByText("普通中国小户型平面图")).toBeInTheDocument();
   expect(screen.getByText("夜间动线：卧室 → 过道 → 卫生间")).toBeInTheDocument();
@@ -169,7 +168,27 @@ test("renders the web simulation entry and opens the live demo surface", async (
   expect(screen.getByText("灶台")).toBeInTheDocument();
   expect(screen.getByText("非摄像头传感器点位")).toBeInTheDocument();
   expect(screen.getByText("老人位置：未检测")).toBeInTheDocument();
-  expect(await screen.findByText("虚拟房间 2")).toBeInTheDocument();
+  expect(screen.queryByText("虚拟房间 2")).not.toBeInTheDocument();
+  expect(screen.queryByText("虚拟传感器 2")).not.toBeInTheDocument();
+  expect(screen.queryByText("正常全天作息")).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: /夜间卫生间滞留/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "重置演示" })).not.toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: "数据分析" }));
+
+  expect(screen.getByRole("button", { name: "数据分析" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  expect(screen.getByRole("heading", { name: "风险等级与响应方式" })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: "居家状态" })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: "传感器事件流" })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: "3 分钟路演节奏" })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: "全场景数字孪生" })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: "当前故事驻留" })).toBeInTheDocument();
+  expect(screen.getByText("02:13 离床")).toBeInTheDocument();
+  expect(screen.getByText("02:45 高风险通知")).toBeInTheDocument();
+  expect(screen.getByText("虚拟房间 2")).toBeInTheDocument();
   expect(screen.getByText("虚拟传感器 2")).toBeInTheDocument();
   expect(screen.getByText("正常全天作息")).toBeInTheDocument();
   expect(
@@ -181,18 +200,6 @@ test("renders the web simulation entry and opens the live demo surface", async (
   expect(screen.getByRole("button", { name: /疑似跌倒风险/i })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: /认知障碍门安全/i })).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "重置演示" })).toBeInTheDocument();
-
-  fireEvent.click(screen.getByRole("button", { name: "数据详情" }));
-
-  expect(screen.getByRole("button", { name: "数据详情" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  expect(screen.getByRole("heading", { name: "居家状态" })).toBeInTheDocument();
-  expect(screen.getByRole("heading", { name: "传感器事件流" })).toBeInTheDocument();
-  expect(screen.getByRole("heading", { name: "3 分钟路演节奏" })).toBeInTheDocument();
-  expect(screen.getByText("02:13 离床")).toBeInTheDocument();
-  expect(screen.getByText("02:45 高风险通知")).toBeInTheDocument();
 });
 
 test("renders wandering door safety as its own story and family alert", async () => {
@@ -247,13 +254,15 @@ test("renders wandering door safety as its own story and family alert", async ()
     },
   });
 
-  await waitFor(() => expect(screen.getAllByText("认知障碍门安全").length).toBeGreaterThan(1));
+  expect(await screen.findByText("老人位置：Entrance")).toBeInTheDocument();
+  expect(screen.getByText("家属通知已发送")).toBeInTheDocument();
+  expect(screen.getAllByText(/夜间异常时段打开入户门/).length).toBeGreaterThan(0);
+
+  fireEvent.click(screen.getByRole("button", { name: "数据分析" }));
+
+  await waitFor(() => expect(screen.getAllByText("认知障碍门安全").length).toBeGreaterThan(0));
   expect(screen.getByText("入户门打开")).toBeInTheDocument();
   expect(screen.getByText("当前驻留：入户门已打开，需要家属和社区照护确认")).toBeInTheDocument();
-  expect(screen.getAllByText(/夜间异常时段打开入户门/).length).toBeGreaterThan(1);
-
-  fireEvent.click(screen.getByRole("button", { name: "数据详情" }));
-
   expect(screen.getByText("02:08 入户门打开")).toBeInTheDocument();
   expect(screen.getByText("Entrance door opened during night safety window.")).toBeInTheDocument();
 });
@@ -305,13 +314,13 @@ test("keeps the story dwell panel and timeline tied to the selected scenario", a
     },
   });
 
-  expect(await screen.findByText("长时间静止观察")).toBeInTheDocument();
+  expect(await screen.findByText("老人位置：Living room")).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: "数据分析" }));
+
+  expect((await screen.findAllByText("长时间静止观察")).length).toBeGreaterThan(0);
   expect(screen.getByText("客餐厅静止持续")).toBeInTheDocument();
   expect(screen.getByText("当前驻留：需要家属确认是否只是休息")).toBeInTheDocument();
-  expect(screen.getByText("老人位置：Living room")).toBeInTheDocument();
-
-  fireEvent.click(screen.getByRole("button", { name: "数据详情" }));
-
   expect(screen.getByText("14:00 客餐厅活动")).toBeInTheDocument();
   expect(screen.getByText("15:30 客餐厅静止持续")).toBeInTheDocument();
   expect(screen.queryByText("02:45 高风险通知")).not.toBeInTheDocument();
@@ -386,7 +395,7 @@ test("starts a scenario and renders realtime state updates", async () => {
   expect(screen.getByText("高风险警戒动画")).toBeInTheDocument();
 
   expect(screen.queryByText("Bathroom presence remains active with no return event.")).not.toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "数据详情" }));
+  fireEvent.click(screen.getByRole("button", { name: "数据分析" }));
   expect(await screen.findByText("Bathroom presence remains active with no return event.")).toBeInTheDocument();
   expect(screen.getByText("高风险通知已触发")).toBeInTheDocument();
 });
@@ -442,18 +451,17 @@ test("reset clears demo state and allows replay", async () => {
 
   expect(await screen.findByText("老人位置：Bedroom")).toBeInTheDocument();
   expect(screen.queryByText("Bed pressure changed to unoccupied.")).not.toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "数据详情" }));
+  fireEvent.click(screen.getByRole("button", { name: "数据分析" }));
   expect(await screen.findByText("Bed pressure changed to unoccupied.")).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "动态演示" }));
-
   fireEvent.click(screen.getByRole("button", { name: "重置演示" }));
 
   expect(MockWebSocket.instances[0].closed).toBe(true);
-  fireEvent.click(screen.getByRole("button", { name: "数据详情" }));
+  fireEvent.click(screen.getByRole("button", { name: "数据分析" }));
   expect(screen.getByText("选择一个演示场景后，非摄像头传感器事件会实时进入这里。")).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "动态演示" }));
   expect(screen.getByText("请选择一个演示场景，系统将实时展示风险评分和解释。")).toBeInTheDocument();
 
+  fireEvent.click(screen.getByRole("button", { name: "演示入口" }));
   fireEvent.click(screen.getByRole("button", { name: /夜间卫生间滞留/i }));
   await waitFor(() => expect(MockWebSocket.instances).toHaveLength(2));
 });
@@ -461,7 +469,7 @@ test("reset clears demo state and allows replay", async () => {
 test("starts digital twin mode and renders generated full-day metadata", async () => {
   render(<App />);
 
-  fireEvent.click(await screen.findByRole("button", { name: "进入实时仿真" }));
+  fireEvent.click(await screen.findByRole("button", { name: "数据分析" }));
 
   fireEvent.change(await screen.findByLabelText("异常注入"), {
     target: { value: "night_bathroom_prolonged_stay" },
@@ -527,13 +535,14 @@ test("starts digital twin mode and renders generated full-day metadata", async (
     },
   });
 
+  expect(screen.queryByText("卫生间存在信号持续超过 30 分钟，未检测到返回卧室。")).not.toBeInTheDocument();
+  expect(await screen.findByText("老人位置：Bathroom")).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: "数据分析" }));
   expect(await screen.findByText("数字孪生运行中")).toBeInTheDocument();
   expect(screen.getAllByText("02:45").length).toBeGreaterThan(0);
   expect(screen.getByText("night_bathroom_overstay")).toBeInTheDocument();
   expect(screen.getByText("7 / 20")).toBeInTheDocument();
-  expect(screen.queryByText("卫生间存在信号持续超过 30 分钟，未检测到返回卧室。")).not.toBeInTheDocument();
-  expect(screen.getByText("老人位置：Bathroom")).toBeInTheDocument();
-
-  fireEvent.click(screen.getByRole("button", { name: "数据详情" }));
   expect(screen.getByText("卫生间存在信号持续超过 30 分钟，未检测到返回卧室。")).toBeInTheDocument();
 });
+

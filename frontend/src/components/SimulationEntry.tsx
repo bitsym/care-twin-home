@@ -1,11 +1,8 @@
-import { Activity, Database, Home, Play, Radio, ShieldCheck } from "lucide-react";
+import { Database, Home, Play } from "lucide-react";
 
-import type { DigitalTwinConfig, RiskState, ScenarioSummary } from "../types";
+import type { ScenarioSummary } from "../types";
 
 interface SimulationEntryProps {
-  config: DigitalTwinConfig | null;
-  connectionLabel: string;
-  riskState: RiskState;
   scenarios: ScenarioSummary[];
   onOpenData: () => void;
   onOpenLive: () => void;
@@ -51,9 +48,6 @@ const scenarioCopy: Record<string, { label: string; lead: string; tone: string }
 };
 
 export function SimulationEntry({
-  config,
-  connectionLabel,
-  riskState,
   scenarios,
   onOpenData,
   onOpenLive,
@@ -89,7 +83,7 @@ export function SimulationEntry({
             </button>
             <button className="entry-secondary-button" onClick={onOpenData} type="button">
               <Database size={18} aria-hidden="true" />
-              <span>查看数据复盘</span>
+              <span>查看数据分析</span>
             </button>
           </div>
         </div>
@@ -111,37 +105,14 @@ export function SimulationEntry({
         </div>
       </section>
 
-      <section className="entry-status-grid" aria-label="仿真能力概览">
-        <div>
-          <Radio size={20} aria-hidden="true" />
-          <span>连接状态</span>
-          <strong>{connectionLabel}</strong>
-        </div>
-        <div>
-          <Activity size={20} aria-hidden="true" />
-          <span>当前风险</span>
-          <strong>{riskState.score} / 100</strong>
-        </div>
-        <div>
-          <ShieldCheck size={20} aria-hidden="true" />
-          <span>场景库</span>
-          <strong>{scenarios.length} 个故事</strong>
-        </div>
-        <div>
-          <Home size={20} aria-hidden="true" />
-          <span>数字孪生</span>
-          <strong>{config ? `${config.rooms.length} 房间 / ${config.sensors.length} 传感器` : "加载中"}</strong>
-        </div>
-      </section>
-
       <section className="entry-scenario-gallery" aria-labelledby="entry-scenarios-title">
         <div className="entry-section-heading">
           <div>
             <p className="section-kicker">Scenario gallery</p>
             <h2 id="entry-scenarios-title">选择一个仿真故事</h2>
           </div>
-          <button className="entry-secondary-button compact" onClick={onOpenLive} type="button">
-            进入完整控制台
+          <button className="entry-secondary-button compact" onClick={onOpenData} type="button">
+            查看风险分析
           </button>
         </div>
 

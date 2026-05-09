@@ -1755,6 +1755,129 @@ h2,
   }
 }
 
+/* Data analysis page: all diagnostic detail lives here, separate from the live animation. */
+.data-demo-grid {
+  grid-template-columns: minmax(360px, 0.78fr) minmax(520px, 1.22fr);
+  align-items: start;
+}
+
+.data-demo-grid .risk-matrix-panel {
+  grid-column: 1 / -1;
+}
+
+.data-demo-grid .scenario-controls {
+  grid-column: 1;
+  grid-row: auto;
+}
+
+.data-demo-grid .twin-panel {
+  grid-column: 2;
+  grid-row: auto;
+}
+
+.data-demo-grid .story-dwell-panel {
+  grid-column: 1 / -1;
+}
+
+.data-demo-grid .timeline-panel {
+  grid-column: 1;
+  grid-row: auto;
+}
+
+.data-demo-grid .floor-panel {
+  grid-column: 2;
+  grid-row: auto;
+}
+
+.data-demo-grid .event-panel {
+  grid-column: 1 / -1;
+}
+
+.risk-matrix-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.risk-matrix-row {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 9px 10px;
+  padding: 14px;
+  border: 1px solid rgba(183, 112, 82, 0.2);
+  border-radius: 8px;
+  background: #fffaf5;
+}
+
+.risk-matrix-row.active {
+  border-color: #c86445;
+  background: #fff1e3;
+  box-shadow: inset 0 0 0 1px rgba(200, 100, 69, 0.14);
+}
+
+.risk-matrix-row svg {
+  color: #c86445;
+  grid-row: span 2;
+}
+
+.risk-matrix-row strong,
+.risk-matrix-row span,
+.risk-matrix-row p,
+.risk-matrix-row small {
+  display: block;
+}
+
+.risk-matrix-row strong {
+  color: #3b2921;
+  font-size: 1rem;
+}
+
+.risk-matrix-row span {
+  margin-top: 2px;
+  color: #9a6a57;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.risk-matrix-row p {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+  color: #3b2921;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.risk-matrix-row small {
+  grid-column: 1 / -1;
+  color: #80665b;
+  line-height: 1.45;
+}
+
+@media (max-width: 1180px) {
+  .data-demo-grid,
+  .data-demo-grid .twin-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .data-demo-grid .scenario-controls,
+  .data-demo-grid .twin-panel,
+  .data-demo-grid .timeline-panel,
+  .data-demo-grid .floor-panel {
+    grid-column: 1 / -1;
+  }
+
+  .risk-matrix-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .risk-matrix-list {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Focused demo mode: keep animation primary and move operational details into a calmer rail. */
 .live-demo-grid {
   grid-template-columns: minmax(620px, 1.65fr) minmax(340px, 0.8fr);
