@@ -85,6 +85,7 @@ care-twin-home/
 ├── PRODUCT_SPEC.md
 ├── DEMO_STORYBOARD.md
 ├── DATA_SCHEMA.md
+├── SYSTEM_ARCHITECTURE.md
 ├── SCENARIOS.md
 ├── MVP_TASKS.md
 ├── frontend/
@@ -154,6 +155,8 @@ http://127.0.0.1:8000/
 ```
 
 For cloud deployment, see `DEPLOY.md`.
+
+For the company-level product architecture, sensor strategy, cloud platform, care workflow, and product roadmap, see `SYSTEM_ARCHITECTURE.md`.
 
 ## API quick checks
 
