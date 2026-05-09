@@ -17,6 +17,13 @@ export function ScenarioControls({
   onStart,
   onReset,
 }: ScenarioControlsProps) {
+  const primaryScenario =
+    scenarios.find((scenario) => scenario.id === "night_bathroom_prolonged_stay") ??
+    scenarios[0];
+  const secondaryScenarios = scenarios.filter(
+    (scenario) => scenario.id !== primaryScenario?.id,
+  );
+
   return (
     <section className="panel scenario-controls" aria-labelledby="scenario-title">
       <div className="panel-heading">
@@ -30,8 +37,30 @@ export function ScenarioControls({
         </button>
       </div>
 
+      {primaryScenario && (
+        <button
+          className={
+            primaryScenario.id === activeScenarioId
+              ? "scenario-hero-button active"
+              : "scenario-hero-button"
+          }
+          disabled={isRunning && primaryScenario.id === activeScenarioId}
+          onClick={() => onStart(primaryScenario.id)}
+          type="button"
+        >
+          <Play size={18} aria-hidden="true" />
+          <span>
+            <em>{scenarioCopy[primaryScenario.id]?.badge ?? "主推演示"}</em>
+            <strong>{scenarioCopy[primaryScenario.id]?.label ?? primaryScenario.name}</strong>
+            <small>
+              {scenarioCopy[primaryScenario.id]?.purpose ?? primaryScenario.purpose}
+            </small>
+          </span>
+        </button>
+      )}
+
       <div className="scenario-list">
-        {scenarios.map((scenario) => {
+        {secondaryScenarios.map((scenario) => {
           const copy = scenarioCopy[scenario.id] ?? {
             label: scenario.name,
             purpose: scenario.purpose,
@@ -49,7 +78,6 @@ export function ScenarioControls({
               <Play size={16} aria-hidden="true" />
               <span>
                 <strong>{copy.label}</strong>
-                <small>{copy.purpose}</small>
               </span>
               <em>{copy.badge}</em>
             </button>

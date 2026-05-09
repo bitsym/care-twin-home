@@ -130,7 +130,7 @@ function App() {
       setDigitalTwinRuntime(message.digital_twin);
     }
     if (message.event) {
-      setEvents((current) => [...current, message.event as SensorEvent]);
+      setEvents((current) => [...current, message.event as SensorEvent].slice(-80));
     }
     if (message.is_complete) {
       setIsRunning(false);
@@ -267,13 +267,25 @@ function App() {
             latestEvent={latestEvent}
             riskState={riskState}
           />
-          <ScenarioControls
-            activeScenarioId={activeScenarioId}
-            isRunning={isRunning}
-            onReset={resetDemo}
-            onStart={runScenario}
-            scenarios={scenarios}
-          />
+          <aside className="live-insight-rail" aria-label="实时照护结果">
+            <RiskPanel riskState={riskState} />
+            <SmartHomeActions homeState={homeState} riskState={riskState} />
+            <FamilyAlertMockup homeState={homeState} riskState={riskState} />
+          </aside>
+          <div className="live-control-row">
+            <ScenarioControls
+              activeScenarioId={activeScenarioId}
+              isRunning={isRunning}
+              onReset={resetDemo}
+              onStart={runScenario}
+              scenarios={scenarios}
+            />
+            <StoryDwellPanel
+              events={events}
+              riskState={riskState}
+              scenarioId={activeScenarioId}
+            />
+          </div>
           <DigitalTwinControls
             config={digitalTwinConfig}
             onSelectAnomaly={setSelectedAnomaly}
@@ -281,14 +293,6 @@ function App() {
             runtime={digitalTwinRuntime}
             selectedAnomaly={selectedAnomaly}
           />
-          <StoryDwellPanel
-            events={events}
-            riskState={riskState}
-            scenarioId={activeScenarioId}
-          />
-          <RiskPanel riskState={riskState} />
-          <SmartHomeActions homeState={homeState} riskState={riskState} />
-          <FamilyAlertMockup homeState={homeState} riskState={riskState} />
         </div>
       ) : (
         <div className="data-demo-grid">

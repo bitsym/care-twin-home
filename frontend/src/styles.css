@@ -1755,6 +1755,283 @@ h2,
   }
 }
 
+/* Focused demo mode: keep animation primary and move operational details into a calmer rail. */
+.live-demo-grid {
+  grid-template-columns: minmax(620px, 1.65fr) minmax(340px, 0.8fr);
+  grid-auto-rows: auto;
+  gap: 14px;
+}
+
+.live-demo-grid .animated-home-panel {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.live-insight-rail {
+  display: grid;
+  grid-column: 2;
+  grid-row: 1;
+  gap: 12px;
+}
+
+.live-insight-rail > .panel,
+.live-insight-rail .risk-panel,
+.live-insight-rail .actions-panel,
+.live-insight-rail .phone-panel {
+  grid-column: auto;
+  grid-row: auto;
+  width: 100%;
+}
+
+.live-control-row {
+  display: grid;
+  grid-template-columns: minmax(460px, 1fr) minmax(340px, 0.72fr);
+  grid-column: 1 / -1;
+  gap: 14px;
+}
+
+.live-demo-grid .scenario-controls,
+.live-demo-grid .story-dwell-panel,
+.live-demo-grid .twin-panel {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+.live-demo-grid .twin-panel {
+  grid-column: 1 / -1;
+}
+
+.live-demo-grid > .twin-panel {
+  grid-column: 1 / -1;
+  grid-row: auto;
+}
+
+.animated-home-panel .panel-heading {
+  margin-bottom: 10px;
+}
+
+.animated-home-stage {
+  min-height: clamp(440px, 48vw, 590px);
+  contain: layout paint;
+  isolation: isolate;
+}
+
+.animated-room {
+  contain: layout paint;
+}
+
+.resident-marker {
+  left: 0;
+  top: 0;
+  transform: translate3d(var(--resident-x, 50%), var(--resident-y, 50%), 0)
+    translate(-50%, -50%);
+  transition:
+    transform 520ms cubic-bezier(0.2, 0.72, 0.2, 1),
+    background 220ms ease,
+    box-shadow 220ms ease;
+  animation: none;
+  will-change: transform;
+}
+
+.resident-marker span {
+  animation: resident-core 2.4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.night-route path {
+  animation: none;
+  stroke-dasharray: 7 7;
+}
+
+.sensor-node.active {
+  animation: sensor-pulse 1.35s ease-out 2;
+  will-change: box-shadow;
+}
+
+.night-light-glow {
+  filter: none;
+  opacity: 0.82;
+  animation: light-glow 2.8s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.alert-sweep {
+  animation: alert-sweep 2.4s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.scenario-controls {
+  overflow: hidden;
+}
+
+.scenario-hero-button {
+  width: 100%;
+  min-height: 92px;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 16px;
+  border: 1px solid rgba(200, 100, 69, 0.32);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 244, 232, 0.98), rgba(255, 250, 245, 0.86)),
+    #fffaf5;
+  color: #3b2921;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 14px 28px rgba(111, 64, 43, 0.08);
+}
+
+.scenario-hero-button.active,
+.scenario-hero-button:hover {
+  border-color: #c86445;
+  background: #fff1e3;
+}
+
+.scenario-hero-button em,
+.scenario-hero-button strong,
+.scenario-hero-button small {
+  display: block;
+  font-style: normal;
+}
+
+.scenario-hero-button em {
+  width: fit-content;
+  margin-bottom: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #c86445;
+  color: #fffaf5;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.scenario-hero-button strong {
+  font-size: 1.05rem;
+}
+
+.scenario-hero-button small {
+  margin-top: 5px;
+  color: #7a5b4c;
+  line-height: 1.42;
+}
+
+.scenario-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.scenario-button {
+  min-height: 52px;
+  grid-template-columns: 18px 1fr;
+  align-items: center;
+  padding: 9px;
+}
+
+.scenario-button span {
+  min-width: 0;
+}
+
+.scenario-button strong {
+  font-size: 0.86rem;
+  line-height: 1.2;
+}
+
+.scenario-button em {
+  grid-column: 2;
+  margin-top: 3px;
+  padding: 0;
+  background: transparent;
+  color: #9a6a57;
+  font-size: 0.68rem;
+}
+
+.twin-panel {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(260px, 0.8fr) minmax(260px, 0.8fr);
+  gap: 12px;
+  align-items: end;
+}
+
+.twin-panel .panel-heading {
+  grid-column: 1;
+  margin-bottom: 0;
+}
+
+.twin-panel .twin-stats {
+  grid-column: 1 / -1;
+  order: 4;
+}
+
+.twin-panel .twin-stats,
+.twin-panel .twin-runtime {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.twin-panel .field-label,
+.twin-panel .primary-run-button,
+.twin-panel .twin-runtime {
+  margin: 0;
+}
+
+.story-dwell-body p {
+  font-size: 0.92rem;
+}
+
+@keyframes resident-core {
+  0%,
+  100% {
+    opacity: 0.88;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+@media (max-width: 1180px) {
+  .live-demo-grid,
+  .live-control-row,
+  .twin-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .live-demo-grid .animated-home-panel,
+  .live-insight-rail,
+  .live-control-row,
+  .live-demo-grid .twin-panel {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .live-insight-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .live-insight-rail .phone-panel {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 760px) {
+  .live-insight-rail,
+  .scenario-list,
+  .twin-panel .twin-stats,
+  .twin-panel .twin-runtime {
+    grid-template-columns: 1fr;
+  }
+
+  .live-insight-rail .phone-panel {
+    grid-column: auto;
+  }
+
+  .scenario-hero-button {
+    min-height: 0;
+  }
+}
+
 @keyframes event-arrive {
   from {
     opacity: 0;
@@ -2470,5 +2747,265 @@ h1 {
   .story-dwell-body small {
     display: grid;
     grid-column: auto;
+  }
+}
+
+/* Final focused-console overrides. Kept at EOF because older route-show rules are still present above. */
+.live-demo-grid {
+  grid-template-columns: minmax(620px, 1.65fr) minmax(340px, 0.8fr);
+  grid-auto-rows: auto;
+  gap: 14px;
+}
+
+.live-demo-grid .animated-home-panel {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.live-insight-rail {
+  display: grid;
+  grid-column: 2;
+  grid-row: 1;
+  gap: 12px;
+}
+
+.live-insight-rail > .panel,
+.live-insight-rail .risk-panel,
+.live-insight-rail .actions-panel,
+.live-insight-rail .phone-panel {
+  grid-column: auto;
+  grid-row: auto;
+  width: 100%;
+}
+
+.live-control-row {
+  display: grid;
+  grid-template-columns: minmax(460px, 1fr) minmax(340px, 0.72fr);
+  grid-column: 1 / -1;
+  gap: 14px;
+}
+
+.live-demo-grid .scenario-controls,
+.live-demo-grid .story-dwell-panel {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+.live-demo-grid > .twin-panel {
+  grid-column: 1 / -1;
+  grid-row: auto;
+}
+
+.animated-home-stage {
+  min-height: clamp(440px, 48vw, 590px);
+  contain: layout paint;
+  isolation: isolate;
+}
+
+.animated-room {
+  contain: layout paint;
+}
+
+.resident-marker {
+  left: 0;
+  top: 0;
+  transform: translate3d(var(--resident-x, 50%), var(--resident-y, 50%), 0)
+    translate(-50%, -50%);
+  transition:
+    transform 520ms cubic-bezier(0.2, 0.72, 0.2, 1),
+    background 220ms ease,
+    box-shadow 220ms ease;
+  animation: none;
+  will-change: transform;
+}
+
+.resident-marker span {
+  animation: resident-core 2.4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.night-route path {
+  animation: none;
+  stroke-dasharray: 7 7;
+}
+
+.sensor-node.active {
+  animation: sensor-pulse 1.35s ease-out 2;
+  will-change: box-shadow;
+}
+
+.night-light-glow {
+  filter: none;
+  opacity: 0.82;
+  animation: light-glow 2.8s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.alert-sweep {
+  animation: alert-sweep 2.4s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.scenario-hero-button {
+  width: 100%;
+  min-height: 92px;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 16px;
+  border: 1px solid rgba(200, 100, 69, 0.32);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 244, 232, 0.98), rgba(255, 250, 245, 0.86)),
+    #fffaf5;
+  color: #3b2921;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 14px 28px rgba(111, 64, 43, 0.08);
+}
+
+.scenario-hero-button.active,
+.scenario-hero-button:hover {
+  border-color: #c86445;
+  background: #fff1e3;
+}
+
+.scenario-hero-button em,
+.scenario-hero-button strong,
+.scenario-hero-button small {
+  display: block;
+  font-style: normal;
+}
+
+.scenario-hero-button em {
+  width: fit-content;
+  margin-bottom: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #c86445;
+  color: #fffaf5;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.scenario-hero-button strong {
+  font-size: 1.05rem;
+}
+
+.scenario-hero-button small {
+  margin-top: 5px;
+  color: #7a5b4c;
+  line-height: 1.42;
+}
+
+.scenario-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.scenario-button {
+  min-height: 52px;
+  grid-template-columns: 18px 1fr;
+  align-items: center;
+  padding: 9px;
+}
+
+.scenario-button span {
+  min-width: 0;
+}
+
+.scenario-button strong {
+  font-size: 0.86rem;
+  line-height: 1.2;
+}
+
+.scenario-button em {
+  grid-column: 2;
+  margin-top: 3px;
+  padding: 0;
+  background: transparent;
+  color: #9a6a57;
+  font-size: 0.68rem;
+}
+
+.twin-panel {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(260px, 0.8fr) minmax(260px, 0.8fr);
+  gap: 12px;
+  align-items: end;
+}
+
+.twin-panel .panel-heading {
+  grid-column: 1;
+  margin-bottom: 0;
+}
+
+.twin-panel .twin-stats {
+  grid-column: 1 / -1;
+  order: 4;
+}
+
+.twin-panel .twin-stats,
+.twin-panel .twin-runtime {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.twin-panel .field-label,
+.twin-panel .primary-run-button,
+.twin-panel .twin-runtime {
+  margin: 0;
+}
+
+@keyframes resident-core {
+  0%,
+  100% {
+    opacity: 0.88;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+@media (max-width: 1180px) {
+  .live-demo-grid,
+  .live-control-row,
+  .twin-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .live-demo-grid .animated-home-panel,
+  .live-insight-rail,
+  .live-control-row,
+  .live-demo-grid > .twin-panel {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .live-insight-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .live-insight-rail .phone-panel {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 760px) {
+  .live-insight-rail,
+  .scenario-list,
+  .twin-panel .twin-stats,
+  .twin-panel .twin-runtime {
+    grid-template-columns: 1fr;
+  }
+
+  .live-insight-rail .phone-panel {
+    grid-column: auto;
+  }
+
+  .scenario-hero-button {
+    min-height: 0;
   }
 }

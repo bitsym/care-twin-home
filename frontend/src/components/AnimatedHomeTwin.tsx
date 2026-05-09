@@ -1,3 +1,5 @@
+import { memo, type CSSProperties } from "react";
+
 import type { HomeState, RiskState, Room, SensorEvent } from "../types";
 
 interface AnimatedHomeTwinProps {
@@ -38,7 +40,17 @@ const riskDisplay: Record<RiskState["level"], string> = {
   "High Risk": "动画高风险",
 };
 
-export function AnimatedHomeTwin({
+const residentPosition: Record<Room | "unknown", { x: string; y: string }> = {
+  unknown: { x: "50%", y: "50%" },
+  bedroom: { x: "78%", y: "28%" },
+  hallway: { x: "47%", y: "52%" },
+  bathroom: { x: "22%", y: "50%" },
+  kitchen: { x: "20%", y: "20%" },
+  living_room: { x: "66%", y: "78%" },
+  entrance: { x: "18%", y: "78%" },
+};
+
+function AnimatedHomeTwinComponent({
   homeState,
   latestEvent,
   riskState,
@@ -49,6 +61,11 @@ export function AnimatedHomeTwin({
   const isBathroomPulse = latestRoom === "bathroom";
   const isHighRisk = riskState.level === "High Risk";
   const isNightLightOn = Boolean(homeState.devices.night_light);
+  const markerPosition = residentPosition[currentLocation ?? "unknown"];
+  const markerStyle = {
+    "--resident-x": markerPosition.x,
+    "--resident-y": markerPosition.y,
+  } as CSSProperties;
 
   return (
     <section
@@ -121,9 +138,8 @@ export function AnimatedHomeTwin({
 
         <span
           aria-hidden="true"
-          className={`resident-marker location-${currentLocation ?? "unknown"} ${
-            isHighRisk ? "resident-alert" : ""
-          }`}
+          className={`resident-marker ${isHighRisk ? "resident-alert" : ""}`}
+          style={markerStyle}
         >
           <span />
         </span>
@@ -138,3 +154,5 @@ export function AnimatedHomeTwin({
     </section>
   );
 }
+
+export const AnimatedHomeTwin = memo(AnimatedHomeTwinComponent);
